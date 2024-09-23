@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+    image: timediff
+    container_name: timediff
+    working_dir: /home/app
+    volumes:
+      - ./app.py:/home/app/app.py
+      - ./uwsgi.ini:/home/app/uwsgi.ini
+      - ./client/build:/home/app/client/build
+    command: uwsgi --ini uwsgi.ini
+    ports:
+      - 8000:8000
+    environment:
+      - ENV
+      - GEONAMES_USERNAME
+      - TIMEZONE_DB_API_KEY
