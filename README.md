@@ -1,6 +1,7 @@
 # Time Difference Calculator
 
 ## Demo
+![timediff](https://github.com/user-attachments/assets/301c68ca-f2aa-40b4-9cbb-5186c003b7af)
 
 ## Overview
 This is the author's practice application in React with TypeScript. This is my first time using these languages, so it should not be the best practice. Please let me know if you detect room for improvement.
@@ -39,7 +40,7 @@ Execute `docker compose up`, and the web application will start to listen on por
    - Run `npm install` (This might require a few minutes).
 4. Run Flask app in development mode
    - Change the directory `cd ..`.
-   - Run `python app.py`, and you can access it at http://localhost:8000
+   - Run `python app.py`, and you can access it at http://localhost:3000
 
 ## License
 The source code is licensed MIT. The website content is licensed CC BY 4.0.
