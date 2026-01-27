@@ -1,19 +1,13 @@
 import { useEffect, useRef, useCallback } from "react";
-import { CitiesProp } from "./utils"
+import { CitiesProp, OffsetProp } from "@/lib/utils"
 import Awesomplete from "awesomplete";
 import "awesomplete/awesomplete.css";
-import { useApp } from "./App";
+import { useApp } from "@/app/page";
 import { useLocation } from "./Location";
-
-const getApiUrl = (base: string, path: string, queryParams: string) => {
-  return base.startsWith("http://localhost")
-    ? `${base}/api/${path}?${queryParams}`
-    : `${base}?path=${path}&${queryParams}`;
-};
+import { searchCity } from "@/app/actions/searchCity";
+import { getTimezone } from "@/app/actions/getTimezone";
 
 export default function AutoCompleteInput({ isHere }: { isHere: boolean }) {
-  const URL = process.env.REACT_APP_API_URL || '';
-
   const awesompleteRef = useRef<Awesomplete | null>(null);
   const suggestionsRef = useRef<CitiesProp>({});
   const inputRef = useRef<HTMLInputElement>(null);
@@ -23,25 +17,21 @@ export default function AutoCompleteInput({ isHere }: { isHere: boolean }) {
 
   const onInput = useCallback((query: string) => {
     debounceTimer.current && clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(() => {
-      fetch(getApiUrl(URL, "search", `query=${query}`))
-        .then(response => response.json())
-        .then(data => {
-          suggestionsRef.current = data;
-          awesompleteRef.current && (awesompleteRef.current.list = Object.keys(suggestionsRef.current));
-        });
+    debounceTimer.current = setTimeout(async () => {
+      const cities = await searchCity(query);
+      suggestionsRef.current = cities;
+      awesompleteRef.current && (awesompleteRef.current.list = Object.keys(suggestionsRef.current));
     }, 500);
-  }, [URL]);
+  }, []);
 
   const onComplete = useCallback((city: string) => {
     // location
     const location = suggestionsRef.current[city];
     (isHere ? setHereLocation : setThereLocation)(location);
     // offset
-    fetch(getApiUrl(URL, "offset", `lat=${location["lat"]}&lng=${location["lng"]}`))
-      .then(response => response.json())
-      .then(data => (isHere ? setHereOffset : setThereOffset)(data));
-  }, [URL, isHere, setHereLocation, setThereLocation, setHereOffset, setThereOffset]);
+    getTimezone(location["lat"], location["lng"])
+      .then(data => (isHere ? setHereOffset : setThereOffset)(data as OffsetProp));
+  }, [isHere, setHereLocation, setThereLocation, setHereOffset, setThereOffset]);
 
   useEffect(() => {
     if (!inputRef.current) return;

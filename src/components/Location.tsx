@@ -1,7 +1,7 @@
 import React, { useState, createContext, useContext } from "react";
-import { OffsetProp } from "./utils";
-import Area from "./Area";
-import TimeDifference from "./TimeDifference";
+import { OffsetProp } from "@/lib/utils";
+import Area from "@/components/Area";
+import TimeDifference from "@/components/TimeDifference";
 
 const LocationContext = createContext<{
   hereOffset: OffsetProp | null;

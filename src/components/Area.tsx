@@ -1,5 +1,8 @@
-import Clock from "./Clock";
-import AutoCompleteInput from "./AutoCompleteInput";
+// import Clock from "@/components/Clock";
+import Clock from "@/components/Clock";
+import dynamic from "next/dynamic";
+
+const AutoCompleteInput = dynamic(() => import("@/components/AutoCompleteInput"), { ssr: false });
 
 function Area({ isHere }: { isHere: boolean }) {
   return (
