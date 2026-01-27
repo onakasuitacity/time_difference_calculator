@@ -1,17 +1,12 @@
 "use server";
 
+import { CitiesProp } from "@/lib/utils";
+
 const ENV = process.env.NODE_ENV;
 const GEONAMES_USERNAME = process.env.GEONAMES_USERNAME;
 
-export type CitySearchResult = {
-  [key: string]: {
-    lat: number;
-    lng: number;
-  };
-};
-
 // Search City Action
-export async function searchCity(query: string): Promise<CitySearchResult> {
+export async function searchCity(query: string) {
   if (query.length < 2) {
     return {};
   }
@@ -25,7 +20,7 @@ export async function searchCity(query: string): Promise<CitySearchResult> {
     }
 
     const data = (await res.json()) as any;
-    const response: CitySearchResult = {};
+    const response: CitiesProp = {};
 
     for (const item of data.geonames) {
       const key = `${item.name}, ${item.countryName}`;

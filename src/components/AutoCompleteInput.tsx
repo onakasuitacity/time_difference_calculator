@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
-import { CitiesProp, OffsetProp } from "@/lib/utils"
+import { CitiesProp } from "@/lib/utils"
 import Awesomplete from "awesomplete";
 import "awesomplete/awesomplete.css";
 import { useApp } from "@/app/page";
@@ -30,7 +30,7 @@ export default function AutoCompleteInput({ isHere }: { isHere: boolean }) {
     (isHere ? setHereLocation : setThereLocation)(location);
     // offset
     getTimezone(location["lat"], location["lng"])
-      .then(data => (isHere ? setHereOffset : setThereOffset)(data as OffsetProp));
+      .then(data => (isHere ? setHereOffset : setThereOffset)(data));
   }, [isHere, setHereLocation, setThereLocation, setHereOffset, setThereOffset]);
 
   useEffect(() => {

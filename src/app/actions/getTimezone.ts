@@ -1,15 +1,12 @@
 "use server";
 
+import { OffsetProp } from "@/lib/utils";
+
 const ENV = process.env.NODE_ENV;
 const TIMEZONE_DB_API_KEY = process.env.TIMEZONE_DB_API_KEY;
 
-export type TimezoneResult = {
-  offset: number;
-  timezone: string;
-};
-
 // Get Timezone Action
-export async function getTimezone(lat: number, lng: number): Promise<TimezoneResult> {
+export async function getTimezone(lat: number, lng: number) {
   if (ENV === "production") {
     const url = `http://api.timezonedb.com/v2.1/get-time-zone?key=${TIMEZONE_DB_API_KEY}&format=json&by=position&lat=${lat}&lng=${lng}`;
 
@@ -23,7 +20,7 @@ export async function getTimezone(lat: number, lng: number): Promise<TimezoneRes
     return {
       offset: data.gmtOffset,
       timezone: data.zoneName,
-    };
+    } as OffsetProp;
   } else {
     // Development mock data
     if (lat > 35 && lat < 36 && lng > 139 && lng < 140) {
